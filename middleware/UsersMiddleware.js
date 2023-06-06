@@ -22,3 +22,8 @@ const authMiddleware = (req, res, next) => {
     // Pass control to the next middleware or route handler
     next();
 };
+
+// Export of all methods as object
+module.exports = {
+    authMiddleware
+};
