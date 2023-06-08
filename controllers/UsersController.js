@@ -19,6 +19,7 @@ const addUser = async (req, res) => {
     console.log(name);
     console.log(password);
     console.log(age);
+
     // const salt = bcrypt.genSaltSync(10);
     // // hash password dengan salt
     // const hashpassword = bcrypt.hashSync(password, salt);
