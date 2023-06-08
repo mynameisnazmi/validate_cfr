@@ -2,19 +2,15 @@ const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../configs/Dbconnect");
 
 const Users = db.define(
-  "user",
+  "users",
   {
-    ID: {
-      type: Sequelize.INTEGER(11),
+    NIK: {
+      type: Sequelize.INTEGER(10),
       primaryKey: true,
     },
-    first_name: DataTypes.STRING(20),
-    department: DataTypes.STRING(35),
-    email: DataTypes.STRING(30),
-    pass: DataTypes.STRING(100),
-    typeUser: DataTypes.INTEGER(10),
-    point: DataTypes.INTEGER(11),
-    kunjungan: DataTypes.SMALLINT(6),
+    Password: DataTypes.TEXT,
+    Name: DataTypes.STRING(50),
+    Age: DataTypes.INTEGER(3),
   },
   {
     freezeTableName: true,

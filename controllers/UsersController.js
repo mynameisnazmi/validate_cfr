@@ -14,18 +14,22 @@ const getAlluser = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
-    const { nik, nama, password, level, department } = req.body;
-    const salt = bcrypt.genSaltSync(10);
-    // hash password dengan salt
-    const hashpassword = bcrypt.hashSync(password, salt);
-    await Users.create({
-      nik: nik,
-      name: nama,
-      password: hashpassword,
-      level: level,
-      department: department,
-    });
-    responseformat(200, "ok", "User Created", res);
+    const { nik, name, password, age } = req.body;
+    console.log("on " + nik);
+    console.log(name);
+    console.log(password);
+    console.log(age);
+    // const salt = bcrypt.genSaltSync(10);
+    // // hash password dengan salt
+    // const hashpassword = bcrypt.hashSync(password, salt);
+    // await Users.create({
+    //   nik: nik,
+    //   name: nama,
+    //   password: hashpassword,
+    //   level: level,
+    //   department: department,
+    // });
+    // responseformat(200, "ok", "User Created", res);
   } catch (error) {
     responseformat(404, "not ok", "User not Create", res);
     //console.log(error.message);
