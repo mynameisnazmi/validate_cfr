@@ -7,7 +7,7 @@ const validator = (req, res, next) => {
   console.log(req.body.name);
   console.log(req.body.password);
   console.log(req.body.age);
-  const { nik, nama, password, age } = req.body;
+  const { nik, name, password, age } = req.body;
   // Check if username and password are provided
   if (!nik || !password) {
     return res
@@ -25,6 +25,7 @@ const validator = (req, res, next) => {
   //req.user = user;
 
   // Pass control to the next middleware or route handler
+  req.validator = true;
   next();
 };
 

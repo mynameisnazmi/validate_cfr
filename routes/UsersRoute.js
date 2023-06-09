@@ -5,8 +5,8 @@ const UsersMiddleware = require("../middleware/UsersMiddleware");
 // Initialization
 const router = Router();
 
+router.post("/register", UsersController.register);
 // router.post("/", UsersController.Auth);
-router.post("/register", UsersMiddleware.validator, UsersController.addUser);
 // router.delete("/delete/:nik", UsersController.deleteUser);
 // router.get("/", UsersController.getAlluser);
 // router.get("/products/:id", getProductById);

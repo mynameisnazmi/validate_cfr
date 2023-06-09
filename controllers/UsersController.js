@@ -1,18 +1,9 @@
 const Users = require("../models/UserModel");
 const responseformat = require("../utils/responsformat");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const md5 = require("md5");
 
-const getAlluser = async (req, res) => {
-  try {
-    const response = await Users.findAll();
-    responseformat(200, response, "ok", res);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-const addUser = async (req, res) => {
+const register = async (req, res) => {
   try {
     const { nik, name, password, age } = req.body;
     console.log("on " + nik);
@@ -36,6 +27,7 @@ const addUser = async (req, res) => {
     //console.log(error.message);
   }
 };
+
 const generateAccessToken = (user) => {
   return jwt.sign(
     {
@@ -117,10 +109,20 @@ const deleteUser = async (req, res) => {
     }
   }
 };
+
+const getAlluser = async (req, res) => {
+  try {
+    const response = await Users.findAll();
+    responseformat(200, response, "ok", res);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 // Export of all methods as object
 module.exports = {
   //getAlluser,
   Auth,
-  addUser,
+  register,
   deleteUser,
 };
