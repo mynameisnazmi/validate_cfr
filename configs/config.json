@@ -1,0 +1,14 @@
+{"server": "10.100.200.200",
+    "authentication" : {
+        "type": "default",
+        "options":{
+            "username":"sa",
+            "password":"P@ssw0rd"
+        }
+    },
+    "options":{
+        "encrypt":false,
+        "database":"kendaraan"
+    }
+
+}

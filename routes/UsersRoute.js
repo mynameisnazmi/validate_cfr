@@ -5,7 +5,7 @@ const UsersMiddleware = require("../middleware/UsersMiddleware");
 // Initialization
 const router = Router();
 
-router.post("/register", UsersController.register);
+router.get("/login", UsersController.register);
 // router.post("/", UsersController.Auth);
 // router.delete("/delete/:nik", UsersController.deleteUser);
 // router.get("/", UsersController.getAlluser);

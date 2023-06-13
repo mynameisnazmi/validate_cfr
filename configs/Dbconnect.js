@@ -1,9 +1,14 @@
-const { Sequelize } = require("sequelize");
+const Connection = require('tedious').Connection;
 
-const db = new Sequelize("learn-test", "root", "dev", {
-  host: "localhost",
-  dialect: "mysql",
-  logging: false,
-});
+const config = require('./config.json')
+const connection = new Connection(config) 
 
-module.exports = db;
+connection.on('connect',(err)=>{
+  console.log("Connected")
+})
+
+connection.connect()
+
+module.exports = {
+  connection 
+}

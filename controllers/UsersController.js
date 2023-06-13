@@ -1,7 +1,9 @@
-const Users = require("../models/UserModel");
+// const Users = require("../models/UserModel");
 const responseformat = require("../utils/responsformat");
-const jwt = require("jsonwebtoken");
-const md5 = require("md5");
+// const jwt = require("jsonwebtoken");
+// const md5 = require("md5");
+const db = require("../configs/Dbconnect");
+const Request = require('tedious').Request;
 
 const register = async (req, res) => {
   try {
@@ -10,6 +12,25 @@ const register = async (req, res) => {
     console.log(name);
     console.log(password);
     console.log(age);
+
+     request = new Request("SELECT * FROM username", function(err, rowCount) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(rowCount + ' rows');
+        // and we close the connection
+        connection.close()
+      }
+    });
+
+    request.on('row', function(columns) {
+      columns.forEach(function(column) {
+        console.log(column.value);
+      });
+    });
+
+    db.connection.execSql(request);
+
 
     // const salt = bcrypt.genSaltSync(10);
     // // hash password dengan salt
