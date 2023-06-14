@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const UsersController = require("../controllers/UsersController");
-const UsersMiddleware = require("../middleware/UsersMiddleware");
 
 // Initialization
 const router = Router();

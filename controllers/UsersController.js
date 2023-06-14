@@ -2,36 +2,36 @@
 const responseformat = require("../utils/responsformat");
 // const jwt = require("jsonwebtoken");
 // const md5 = require("md5");
-const db = require("../configs/Dbconnect");
+const connection = require("../configs/Dbconnect");
 const Request = require('tedious').Request;
 
 const register = async (req, res) => {
   try {
-    const { nik, name, password, age } = req.body;
-    console.log("on " + nik);
-    console.log(name);
-    console.log(password);
-    console.log(age);
+    // const { nik, name, password, age } = req.body;
+    // console.log("on " + nik);
+    // console.log(name);
+    // console.log(password);
+    // console.log(age);
 
-     request = new Request("SELECT * FROM username", function(err, rowCount) {
+   const selectQuery = `SELECT top 10 * FROM username`;
+
+   const request = new Request(selectQuery, (err, rowCount, rows) => {
       if (err) {
-        console.log(err);
+        console.error('Error selecting data:', err.message);
       } else {
-        console.log(rowCount + ' rows');
-        // and we close the connection
-        connection.close()
+        console.log(`${rowCount} row(s) selected.`);
+        rows.forEach((row) => {
+          console.log(row);
+        });
       }
     });
+    connection.execSql(request);
 
     request.on('row', function(columns) {
       columns.forEach(function(column) {
         console.log(column.value);
       });
     });
-
-    db.connection.execSql(request);
-
-
     // const salt = bcrypt.genSaltSync(10);
     // // hash password dengan salt
     // const hashpassword = bcrypt.hashSync(password, salt);
