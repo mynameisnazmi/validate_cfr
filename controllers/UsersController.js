@@ -1,9 +1,7 @@
-// const Users = require("../models/UserModel");
+const Users = require("../models/UserModel");
 const responseformat = require("../utils/responsformat");
 // const jwt = require("jsonwebtoken");
 // const md5 = require("md5");
-const connection = require("../configs/Dbconnect");
-const Request = require('tedious').Request;
 
 const register = async (req, res) => {
   try {
@@ -13,25 +11,12 @@ const register = async (req, res) => {
     // console.log(password);
     // console.log(age);
 
-   const selectQuery = `SELECT top 10 * FROM username`;
-
-   const request = new Request(selectQuery, (err, rowCount, rows) => {
-      if (err) {
-        console.error('Error selecting data:', err.message);
-      } else {
-        console.log(`${rowCount} row(s) selected.`);
-        rows.forEach((row) => {
-          console.log(row);
-        });
-      }
+    Users.getUserdata().then(function (value) {
+      console.log(value[1].nama);
+      console.log(value[2].nama);
+      responseformat(200, value, "ok", res);
     });
-    connection.execSql(request);
 
-    request.on('row', function(columns) {
-      columns.forEach(function(column) {
-        console.log(column.value);
-      });
-    });
     // const salt = bcrypt.genSaltSync(10);
     // // hash password dengan salt
     // const hashpassword = bcrypt.hashSync(password, salt);
@@ -42,7 +27,6 @@ const register = async (req, res) => {
     //   level: level,
     //   department: department,
     // });
-    // responseformat(200, "ok", "User Created", res);
   } catch (error) {
     responseformat(404, "not ok", "User not Create", res);
     //console.log(error.message);
