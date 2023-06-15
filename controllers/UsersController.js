@@ -12,8 +12,9 @@ const register = async (req, res) => {
     // console.log(age);
 
     Users.getUserdata().then(function (value) {
+      console.log(value[1].userid);
+      console.log(value[1].password);
       console.log(value[1].nama);
-      console.log(value[2].nama);
       responseformat(200, value, "ok", res);
     });
 
