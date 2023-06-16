@@ -10,13 +10,14 @@ const authenticateToken = (req, res, next) => {
     return responseformat(401, "Unauthorized", "", res);
   }
   //check the token with ACCESS_TOKEN_SECRET
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, userid) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
     if (err) {
       return responseformat(403, "Forbidden Access", "", res);
     }
-    console.log(userid);
+    //console.log(userid);
     //assign extract data payload to req.user
-    req.userid = userid;
+    req.userid = data;
+    next();
   });
 };
 

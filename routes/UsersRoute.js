@@ -10,7 +10,7 @@ router.post("/register", UsersController.register);
 router.post(
   "/savedata",
   UsersMiddleware.authenticateToken,
-  UsersController.register
+  UsersController.savedata
 );
 // router.delete("/delete/:nik", UsersController.deleteUser);
 // router.get("/", UsersController.getAlluser);
