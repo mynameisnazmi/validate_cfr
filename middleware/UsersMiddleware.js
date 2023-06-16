@@ -1,35 +1,26 @@
-// const express = require('express');
-// const app = express();
+const jwt = require("jsonwebtoken");
+const responseformat = require("../utils/responsformat");
 
-// Authentication Middleware
-const validator = (req, res, next) => {
-  console.log(req.body.nik);
-  console.log(req.body.name);
-  console.log(req.body.password);
-  console.log(req.body.age);
-  const { nik, name, password, age } = req.body;
-  // Check if username and password are provided
-  if (!nik || !password) {
-    return res
-      .status(401)
-      .send("Authentication failed: Username and password are required.");
+const authenticateToken = (req, res, next) => {
+  //Get token
+  const authHeader = req.headers["authorization"];
+  //compare and split toker bearer TOKEN
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) {
+    return responseformat(401, "Unauthorized", "", res);
   }
-
-  // Check if user exists
-  // const user = users.find(u => u.username === username && u.password === password);
-  // if (!user) {
-  //     return res.status(401).send('Authentication failed: Invalid username or password.');
-  // }
-
-  // Attach the user object to the request for further use
-  //req.user = user;
-
-  // Pass control to the next middleware or route handler
-  req.validator = true;
-  next();
+  //check the token with ACCESS_TOKEN_SECRET
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, userid) => {
+    if (err) {
+      return responseformat(403, "Forbidden Access", "", res);
+    }
+    console.log(userid);
+    //assign extract data payload to req.user
+    req.userid = userid;
+  });
 };
 
 // Export of all methods as object
 module.exports = {
-  validator,
+  authenticateToken,
 };

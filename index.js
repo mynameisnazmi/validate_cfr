@@ -1,6 +1,7 @@
 const express = require("express");
-//import FileUpload from "express-fileupload";
 const cors = require("cors");
+require("dotenv").config();
+//import FileUpload from "express-fileupload";
 
 const UsersRoute = require("./routes/UsersRoute.js");
 

@@ -1,15 +1,15 @@
 const connection = require("../configs/Dbconnect");
-const { Request } = require("tedious");
+const { Request, TYPES } = require("tedious");
 
-const getUserdata = async () => {
-  //ar id = "id you want or user inputs";
-
+const getUserdata = async (uid, pass) => {
+  //  console.log(uid, pass);
   const allData = {};
+  const selectQuery = `SELECT userid, nama FROM username WHERE userid = @uid AND password = @pass`;
   let row = 0;
-  const selectQuery = `SELECT top 10 * FROM username`;
-  // We now set the promise awaiting it gets results
+
+  //Set the promise awaiting it gets results
   await new Promise((resolve, reject) => {
-    const request = new Request(selectQuery, function (err, rowCount) {
+    const request = new Request(selectQuery, function (err /*, rowCount*/) {
       if (err) {
         return reject(err);
       } else {
@@ -17,7 +17,8 @@ const getUserdata = async () => {
       }
     });
 
-    // request.addParameter("id", TYPES.NVarChar, id); //Param id declaration
+    request.addParameter("uid", TYPES.VarChar, uid); //Param declaration
+    request.addParameter("pass", TYPES.VarChar, pass); //Param declaration
     request.on("row", function (columns) {
       allData[row] = {};
       columns.forEach(function (column) {
@@ -26,15 +27,14 @@ const getUserdata = async () => {
       row += 1;
     });
 
-    request.on("doneProc", function (rowCount, more, returnStatus, rows) {
-      console.log("onDoneProc");
-      return resolve(allData); //Here we resolve allData using promise in order to get it´s content later
+    request.on("doneProc", function (/*rowCount, more, returnStatus, rows*/) {
+      // console.log("onDoneProc");
+      return resolve(allData); //Resolve allData using promise in order to get it´s content later
     });
     connection.execSql(request);
   });
-  //console.log(allData);
+
   return allData;
-  //console.log(allData);
 };
 
 // Export of all methods as object
