@@ -37,7 +37,13 @@ const getUserdata = async (uid, pass) => {
   return allData;
 };
 
+const addUserdata = async(uid, pass)=>{
+  
+}
+
+
 // Export of all methods as object
 module.exports = {
   getUserdata,
+  addUserdata
 };
