@@ -7,9 +7,12 @@ const login = async (req, res) => {
   try {
     const { userid, password } = req.body;
 
+    const useridToSTR = String(userid);
+    const passwordToSTR = String(password);
+
     //validate string
-    useridTrim = userid.trim();
-    passwordTrim = password.trim();
+    useridTrim = useridToSTR.trim();
+    passwordTrim = passwordToSTR.trim();
     useridTrim = useridTrim.replace(/\s/g, "");
     passwordHash = md5(passwordTrim);
 
@@ -18,6 +21,7 @@ const login = async (req, res) => {
       // console.log(value[0].userid);
       // console.log(value[0].password);
       // console.log(value[0].nama);
+
       if (Object.keys(value).length == 0) {
         responseformat(404, "not ok", "User not found", res);
       } else {
@@ -27,9 +31,37 @@ const login = async (req, res) => {
         responseformat(200, data, "ok", res);
       }
     });
-
   } catch (error) {
     responseformat(404, "not ok", "User not found", res);
+    //console.log(error.message);
+  }
+};
+
+const register = async (req, res) => {
+  try {
+    const { userid, nama, password } = req.body;
+
+    const useridToSTR = String(userid);
+    const namaToSTR = String(nama);
+    const passwordToSTR = String(password);
+
+    //console.log(useridToSTR, namaToSTR, passwordToSTR);
+
+    //validate string
+    useridTrim = useridToSTR.trim();
+    namaTrim = namaToSTR.trim();
+    passwordTrim = passwordToSTR.trim();
+    useridTrim = useridTrim.replace(/\s/g, "");
+    passwordHash = md5(passwordTrim);
+
+    //insert data
+    Users.addUserdata(useridTrim, passwordHash, namaTrim).then(function (
+      value
+    ) {
+      responseformat(200, "No data", value[0].result, res);
+    });
+  } catch (error) {
+    responseformat(404, "not ok", "User not Create", res);
     //console.log(error.message);
   }
 };
@@ -45,38 +77,6 @@ const savedata = async (req, res) => {
   }
 };
 
-
-const register = async (req, res) => {
-  try {
-    const { userid,nama,password } = req.body;
-
-    //validate string
-    useridTrim = userid.trim();
-    passwordTrim = password.trim();
-    namaTrim = nama.trim();
-    useridTrim = useridTrim.replace(/\s/g, "");
-    passwordHash = md5(passwordTrim);
-
-    //insert data 
-    Users.addUserdata(useridTrim, passwordHash,namaTrim).then(function (value) {
-      // console.log(value[0].userid);
-      // console.log(value[0].password);
-      // console.log(value[0].nama);
-      if (Object.keys(value).length == 0) {
-        responseformat(404, "not ok", "User not found", res);
-      } else {
-        const userid = { userid: value[0].userid };
-        const accessToken = jwt.sign(userid, process.env.ACCESS_TOKEN_SECRET);
-        const data = { nama: value[0].nama, accessToken: accessToken };
-        responseformat(200, data, "ok", res);
-      }
-    });
-
-  } catch (error) {
-    responseformat(404, "not ok", "User not Create", res);
-    //console.log(error.message);
-  }
-};
 // Export of all methods as object
 module.exports = {
   savedata,

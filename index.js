@@ -1,9 +1,11 @@
 const express = require("express");
 const cors = require("cors");
+
 require("dotenv").config();
 //import FileUpload from "express-fileupload";
 
 const UsersRoute = require("./routes/UsersRoute.js");
+const DashboardRoute = require("./routes/DashboardRoute.js");
 
 // Server Initialization
 const app = express();
@@ -17,6 +19,7 @@ app.use(express.json());
 
 // Routes will be written here
 app.use("/users", UsersRoute);
+app.use("/dashboard", DashboardRoute);
 
 app.listen(PORT, (error) => {
   if (!error)

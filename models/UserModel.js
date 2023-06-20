@@ -5,20 +5,21 @@ const getUserdata = async (uid, pass) => {
   //  console.log(uid, pass);
   const allData = {};
   let row = 0;
-  const selectQuery = `SELECT userid, nama FROM username WHERE userid = @uid AND password = @pass`;
-
+  const query =
+    "SELECT userid, nama FROM username WHERE userid = @uid AND password = @pass";
   //Set the promise awaiting it gets results
   await new Promise((resolve, reject) => {
     //create request
-    const request = new Request(selectQuery, function (err /*, rowCount*/) {
+    const request = new Request(query, function (err /*, rowCount*/) {
       if (err) {
         return reject(err);
       } else {
         //console.log(rowCount + " rows");
       }
+      //connection.close();
     });
-    
-    //add parameter and get value from DB
+
+    //Add parameter and get value from DB
     request.addParameter("uid", TYPES.VarChar, uid); //Param declaration
     request.addParameter("pass", TYPES.VarChar, pass); //Param declaration
     request.on("row", function (columns) {
@@ -32,7 +33,7 @@ const getUserdata = async (uid, pass) => {
 
     //When done return value
     request.on("doneProc", function (/*rowCount, more, returnStatus, rows*/) {
-      // console.log("onDoneProc");
+      //console.log(allData);
       return resolve(allData); //Resolve allData using promise in order to get it´s content later
     });
     connection.execSql(request);
@@ -41,43 +42,57 @@ const getUserdata = async (uid, pass) => {
   return allData;
 };
 
-const addUserdata = async(uid,nama, pass)=>{
-  //const allData = {};
-  //let row = 0;
-  const sp_name = '[dbo].[sample]'
+const addUserdata = async (uid, nama, pass) => {
+  let row = 0;
+  const allData = {};
+  allData[row] = {};
+  try {
+    //Check user
+    const sp_name = "[dbo].[register_username]";
 
-//Set the promise awaiting it gets results
-await new Promise((resolve, reject) => {
-  const request = new Request(sp_name, function (err /*, rowCount*/) {
-    if (err) {
-      return reject('Error executing stored procedure:',err);
-    } else {
-      console.log('Stored procedure executed successfully');;
-    }
-     // Close the connection after executing the stored procedure
-     connection.close();
-  });
+    //Set the promise awaiting it gets results
+    await new Promise((resolve, reject) => {
+      const request = new Request(sp_name, function (error, rowCount, rows) {
+        if (error) {
+          return reject("Error executing stored procedure:", error);
+        } else {
+          //console.log("Stored procedure executed successfully");
+        }
+        // Close the connection after executing the stored procedure
+        //connection.close();
+      });
 
-  //Add parameter input
-  request.addParameter("uid", TYPES.VarChar, uid); //Param declaration
-  request.addParameter("nama", TYPES.VarChar, nama); //Param declaration
-  request.addParameter("pass", TYPES.VarChar, pass); //Param declaration
-  //Add parameter output
-  request.addOutputParameter('outputCount', TYPES.Int);
+      //Add parameter input
+      request.addParameter("uid", TYPES.VarChar, uid); //Param declaration
+      request.addParameter("nama", TYPES.VarChar, nama); //Param declaration
+      request.addParameter("pass", TYPES.VarChar, pass); //Param declaration
 
+      //Add parameter output
+      request.addOutputParameter("result", TYPES.VarChar); //Param declaration
 
-  request.on('returnValue', (paramName, value, metadata) => {
-    //console.log(paramName + ' : ' + value);
-    return resolve(value); //Resolve allData using promise in order to get it´s content later
-  });
-  connection.callProcedure(request);
+      //get output value
+      request.on("returnValue", (parameterName, value, metadata) => {
+        allData[row][parameterName] = value;
+        row += 1;
+      });
+      //console.log(allData);
 
-});
-}
+      //When done return value
+      request.on("doneProc", function (/*rowCount, more, returnStatus, rows*/) {
+        //console.log(allData);
+        return resolve(allData); //Resolve allData using promise in order to get it´s content later
+      });
 
+      connection.callProcedure(request);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  return allData;
+};
 
 // Export of all methods as object
 module.exports = {
   getUserdata,
-  addUserdata
+  addUserdata,
 };
