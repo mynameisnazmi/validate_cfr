@@ -4,8 +4,8 @@ const responseformat = require("../utils/responsformat");
 
 const uploadfile = async (req, res) => {
   console.log("test");
-
-  Dashboard.uploadfile().then(() => {});
+  console.log(req.file);
+  //Dashboard.uploadfile().then(() => {});
 };
 
 // Export of all methods as object
