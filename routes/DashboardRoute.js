@@ -6,7 +6,7 @@ const DashboardController = require("../controllers/DashBoardController");
 // Setlocation
 const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads");
+    cb(null, "uploads"); // Save uploaded files to the "uploads" folder
   },
   filename: function (req, file, cb) {
     cb(
